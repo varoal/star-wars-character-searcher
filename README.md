@@ -4,9 +4,9 @@ Take-home frontend assignment: **Lit** (Web Components) and vanilla JavaScript. 
 
 ## Trade-offs
 
-- **Pagination**: SWAPI supports pagination; this app shows the first page only. No “next/previous” UI or logic—keeps scope focused on search, list, and detail. Helper text (“First page of results only”) appears only when the API indicates more pages exist.
-- **Tests**: @open-wc/testing + @web/test-runner (Puppeteer/Chromium). Minimal coverage: **service** (getPeople with mocked fetch—success, error), **character-list** (idle message + list click dispatches `character-select`), and **app** (initial render shows idle state). Run with `npm run test`.
-- **Cache & debounce**: A small in-memory cache (plain object keyed by normalized query) and an inline ~300ms debounce on the search input are included. Both are minimal (no extra libraries), reduce API calls, and keep the input responsive; cache is not persisted (e.g. no localStorage).
+- **Pagination**: SWAPI supports pagination, but the app intentionally shows results from the first page only. There is no next or previous UI or pagination logic, in order to keep the scope focused on the core search, list, and detail flow. When the API response includes a next value, the UI displays a small helper message indicating that more results exist and that only the first page is being shown (for example: “Showing X of Y results”).
+- **Tests**: The project includes a small set of tests using @open-wc/testing and @web/test-runner, covering the main service method, basic communication in the character list, and the initial idle state of the app. Tests can be run with `npm run test`.
+- **Cache & debounce**: A small in-memory cache and a ~300ms debounce on the search input are included. This avoids unnecessary API calls and keeps the input responsive, without adding extra libraries or persistence (for example, no localStorage).
 
 ## Run the app
 
@@ -21,25 +21,25 @@ Then open the URL shown in the terminal (e.g. [http://localhost:5173](http://loc
 
 ```
 src/
-├── main.js                 # Entry: registers <star-wars-character-search>
-├── app.js                  # Root: StarWarsCharacterSearch, owns state, wires search/list/detail
+├── main.js                 # Entry point, registers <star-wars-character-search>
+├── app.js                  # Root component, owns state and connects search, list, and detail
 ├── components/
-│   ├── character-search.js # Search input; dispatches character-search
-│   ├── character-list.js   # Results list; dispatches character-select
-│   ├── character-list.test.js # list characters and dispatches selection
-│   └── character-detail.js # Inline detail (name, birth year, gender)
+│   ├── character-search.js # Search input component, emits character-search
+│   ├── character-list.js   # Renders results list and emits character-select
+│   ├── character-list.test.js # Tests list rendering and selection event
+│   └── character-detail.js # Inline character detail view
 ├── services/
-│   ├── swapi.js            # getPeople(search) — fetch + error handling
-│   └── swapi.test.js       # getPeople with mocked fetch
-├── app.test.js             # idle state
+│   ├── swapi.js            # SWAPI access and basic error handling
+│   └── swapi.test.js       # Service tests with mocked fetch
+├── app.test.js             # App-level idle state test
 └── lib/
-    └── ui-states.js        # UI_STATE: idle, loading, success, empty, error
+    └── ui-states.js        # Shared UI state constants
 ```
 
 - **Data & errors**: All SWAPI access goes through `services/swapi.js`. UI states (idle, loading, success, empty, error) are explicit.
 - **Cache & debounce**: In-memory cache lives in the app root. Search runs on input change with a simple ~300ms debounce in `character-search` (no extra libs).
 - **Communication**: Parent passes data via properties; children emit `character-search` and `character-select` custom events.
-- **JSDoc**: Used for SWAPI types, service result shape, and custom event contracts.
+- **JSDoc**: JSDoc comments are used where they add value to the developer experience, mainly to document service return values, and the custom events shared between components.
 
 ## Scripts
 
