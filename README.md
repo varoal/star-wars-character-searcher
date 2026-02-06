@@ -1,12 +1,12 @@
 # Star Wars Character Search
 
-A small frontend assignment built with **Lit** (Web Components) and vanilla JavaScript. Search Star Wars characters by name and view details; data is fetched from [SWAPI](https://swapi.dev/documentation).
-> Scope note: This solution intentionally keeps the architecture and styling simple to match the expected ~4h implementation time.
-> The search is submit-based for simplicity; adding a debounced "search-as-you-type" flow would be a natural next step.
+Take-home frontend assignment: **Lit** (Web Components) and vanilla JavaScript. Search Star Wars characters by name and view details; data from [SWAPI](https://swapi.dev/documentation). Architecture and styling kept simple to fit the intended scope (~4h).
 
 ## Trade-offs
 
-- Pagination is supported by SWAPI, but intentionally limited to the first page to keep the scope focused on search and selection within the given time constraints.
+- **Pagination**: SWAPI supports pagination; this app shows the first page only. No “next/previous” UI or logic—keeps scope focused on search, list, and detail. Helper text (“First page of results only”) appears only when the API indicates more pages exist.
+- **Tests**: Next step would be adding a small test setup (e.g. OpenWC + test runner).
+- **Cache & debounce**: A small in-memory cache (plain object keyed by normalized query) and an inline ~300ms debounce on the search input are included. Both are minimal (no extra libraries), reduce API calls, and keep the input responsive; cache is not persisted (e.g. no localStorage).
 
 ## Run the app
 
@@ -15,7 +15,7 @@ npm install
 npm run dev
 ```
 
-Then open the URL shown in the terminal (e.g. http://localhost:5173).
+Then open the URL shown in the terminal (e.g. [http://localhost:5173](http://localhost:5173)).
 
 ## File structure
 
@@ -34,13 +34,17 @@ src/
 ```
 
 - **Data & errors**: All SWAPI access goes through `services/swapi.js`. UI states (idle, loading, success, empty, error) are explicit and drive list/detail messaging.
+- **Cache & debounce**: In-memory cache lives in the app root. Search runs on input change with a simple ~300ms debounce in `character-search` (no extra libs).
 - **Communication**: Parent passes data via properties; children emit `character-search` and `character-select` custom events.
 - **JSDoc**: Used for SWAPI types, service result shape, and custom event contracts.
 
 ## Scripts
 
-| Command     | Description        |
-|------------|--------------------|
-| `npm run dev`    | Start dev server   |
-| `npm run build`  | Production build   |
-| `npm run preview`| Preview production build |
+
+| Command           | Description              |
+| ----------------- | ------------------------ |
+| `npm run dev`     | Start dev server         |
+| `npm run build`   | Production build         |
+| `npm run preview` | Preview production build |
+
+

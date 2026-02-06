@@ -21,12 +21,14 @@ const SWAPI_BASE = 'https://swapi.dev/api/';
  * @typedef {Object} PeopleSearchResult
  * @property {boolean} ok - True if the request succeeded and response was valid.
  * @property {SwapiPerson[]} [data] - Present when ok is true (may be empty).
+ * @property {number} [count] - Present when ok is true; total matches from API (all pages).
+ * @property {boolean} [hasNext] - Present when ok is true; true if API returned a `next` page URL.
  * @property {string} [error] - Present when ok is false; user-facing message.
  */
 
 /**
- * Fetches people from SWAPI. Uses the documented `search` query parameter;
- * the API does case-insensitive partial matching.
+ * Fetches people from SWAPI (first page only; no pagination).
+ * Uses the documented `search` query parameter; API does case-insensitive partial matching.
  * @param {string} search - Search query (e.g. name). Empty returns first page of people.
  * @returns {Promise<PeopleSearchResult>}
  */
@@ -60,6 +62,8 @@ export async function getPeople(search) {
     return {
       ok: true,
       data: json.results,
+      count: typeof json.count === 'number' ? json.count : json.results.length,
+      hasNext: Boolean(json.next),
     };
   } catch (e) {
     const message = e && e.message ? e.message : 'Network or request error';
