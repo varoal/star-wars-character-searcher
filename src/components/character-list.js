@@ -10,28 +10,73 @@ import { LitElement, html, css } from 'lit';
 export class CharacterList extends LitElement {
   static get styles() {
     return css`
+      :host {
+        display: block;
+      }
+      p {
+        margin: 0;
+        color: #555;
+        font-size: 0.95rem;
+      }
+      .list-wrap {
+        background: #fafafa;
+        border: 1px solid #eee;
+        border-radius: 6px;
+        padding: 0.75rem;
+      }
       ul {
         list-style: none;
-        margin: 1rem 0;
+        margin: 0;
         padding: 0;
       }
       li {
-        margin-bottom: 0.25rem;
+        margin-bottom: 0.375rem;
+      }
+      li:last-child {
+        margin-bottom: 0;
       }
       button {
         width: 100%;
         text-align: left;
-        padding: 0.25rem 0.5rem;
+        padding: 0.5rem 0.75rem;
+        border: 1px solid transparent;
+        border-radius: 4px;
+        background: #fff;
+        font-size: 1rem;
+        cursor: pointer;
+        display: block;
+      }
+      button:hover {
+        background: #eee;
+        border-color: #e0e0e0;
+      }
+      button:focus {
+        outline: 2px solid #666;
+        outline-offset: 2px;
       }
       .error {
-        color: #c00;
-        margin: 1rem 0;
+        color: #b00;
+        margin: 0;
+        padding: 0.75rem;
+        background: #fef5f5;
+        border: 1px solid #f0d0d0;
+        border-radius: 6px;
+      }
+      .error p {
+        margin: 0 0 0.25rem 0;
+        color: inherit;
+      }
+      .error p:last-child {
+        margin-bottom: 0;
+        font-size: 0.9rem;
       }
       .loading {
         display: flex;
         align-items: center;
         gap: 0.5rem;
-        margin: 1rem 0;
+        margin: 0;
+        padding: 0.75rem;
+        color: #555;
       }
       .spinner {
         width: 1.25rem;
@@ -103,19 +148,20 @@ export class CharacterList extends LitElement {
     }
     if (this.state === 'idle') {
       return html`
-        <p role="status">Enter a name and click Search to find characters.</p>
+        <p role="status" class="list-wrap">Enter a name and click Search to find characters.</p>
       `;
     }
     if (this.state === 'empty' || !this.characters.length) {
       return html`
-        <p role="status">No characters found. Try a different name.</p>
+        <p role="status" class="list-wrap">No characters found. Try a different name.</p>
       `;
     }
 
     return html`
+      <div class="list-wrap">
       <ul>
         ${this.characters.map(
-          (c) => html`
+      (c) => html`
             <li>
               <button
                 type="button"
@@ -126,8 +172,9 @@ export class CharacterList extends LitElement {
               </button>
             </li>
           `,
-        )}
+    )}
       </ul>
+      </div>
     `;
   }
 }

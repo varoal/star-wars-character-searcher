@@ -9,14 +9,38 @@ import { LitElement, html, css } from 'lit';
 export class CharacterSearch extends LitElement {
   static get styles() {
     return css`
+      :host {
+        display: block;
+      }
       form {
         display: flex;
         gap: 0.5rem;
-        margin: 1rem 0;
       }
       input {
         flex: 1;
-        padding: 0.25rem 0.5rem;
+        padding: 0.5rem 0.75rem;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        font-size: 1rem;
+      }
+      input:focus {
+        outline: none;
+        border-color: #666;
+      }
+      button {
+        padding: 0.5rem 1rem;
+        border: 1px solid #666;
+        border-radius: 4px;
+        background: #f5f5f5;
+        font-size: 1rem;
+        cursor: pointer;
+      }
+      button:hover:not(:disabled) {
+        background: #eee;
+      }
+      button:focus {
+        outline: none;
+        border-color: #333;
       }
     `;
   }

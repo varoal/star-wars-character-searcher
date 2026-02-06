@@ -8,18 +8,50 @@ import { LitElement, html, css } from 'lit';
 export class CharacterDetail extends LitElement {
   static get styles() {
     return css`
+      :host {
+        display: block;
+      }
+      p {
+        margin: 0;
+        color: #555;
+        font-size: 0.95rem;
+      }
+      .prompt {
+        padding: 1rem;
+        background: #fafafa;
+        border: 1px solid #eee;
+        border-radius: 6px;
+      }
       section {
-        margin-top: 1rem;
+        padding: 1rem;
+        background: #fafafa;
+        border: 1px solid #eee;
+        border-radius: 6px;
+      }
+      h2 {
+        margin: 0 0 0.75rem 0;
+        font-size: 1.25rem;
+        font-weight: 600;
+        color: #1a1a1a;
       }
       dl {
-        margin: 0.5rem 0;
+        margin: 0;
       }
       dt {
-        font-weight: bold;
+        font-size: 0.8rem;
+        font-weight: 600;
+        color: #666;
+        text-transform: uppercase;
+        letter-spacing: 0.02em;
         margin-top: 0.5rem;
       }
+      dt:first-of-type {
+        margin-top: 0;
+      }
       dd {
-        margin-left: 0;
+        margin: 0.15rem 0 0 0;
+        font-size: 1rem;
+        color: #1a1a1a;
       }
     `;
   }
@@ -44,7 +76,7 @@ export class CharacterDetail extends LitElement {
       if (!this.hasResults) {
         return html``;
       }
-      return html`<p aria-live="polite">Select a character to see details.</p>`;
+      return html`<p class="prompt" aria-live="polite">Select a character to see details.</p>`;
     }
 
     const { name, birth_year, gender } = this.character;

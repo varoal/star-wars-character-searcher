@@ -4,6 +4,9 @@ A small frontend assignment built with **Lit** (Web Components) and vanilla Java
 > Scope note: This solution intentionally keeps the architecture and styling simple to match the expected ~4h implementation time.
 > The search is submit-based for simplicity; adding a debounced "search-as-you-type" flow would be a natural next step.
 
+## Trade-offs
+
+- Pagination is supported by SWAPI, but intentionally limited to the first page to keep the scope focused on search and selection within the given time constraints.
 
 ## Run the app
 

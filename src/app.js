@@ -16,7 +16,24 @@ export class StarWarsCharacterSearch extends LitElement {
         font-family: system-ui, sans-serif;
         max-width: 40rem;
         margin: 2rem auto;
-        padding: 0 1rem;
+        padding: 0 1.5rem;
+      }
+      h1 {
+        font-size: 1.5rem;
+        font-weight: 600;
+        margin: 0 0 1.25rem 0;
+        color: #1a1a1a;
+      }
+      character-search {
+        display: block;
+        margin-bottom: 1.5rem;
+      }
+      character-list {
+        display: block;
+        margin-bottom: 1.5rem;
+      }
+      character-detail {
+        display: block;
       }
     `;
   }
