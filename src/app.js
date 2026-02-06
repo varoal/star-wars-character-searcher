@@ -54,10 +54,13 @@ export class StarWarsCharacterSearch extends LitElement {
    * @param {CustomEvent<{ character: import('./services/swapi.js').SwapiPerson }>} e
    */
   _onSelect(e) {
-    debugger
     this._selected = e.detail?.character ?? null;
   }
 
+  /**
+   * Fetches people for the given query and updates list state (characters, uiState, errorMessage).
+   * @param {string} query
+   */
   async _runSearch(query) {
     this._uiState = UI_STATE.LOADING;
     this._errorMessage = '';
@@ -85,19 +88,18 @@ export class StarWarsCharacterSearch extends LitElement {
         @character-select=${this._onSelect}
       >
         <h1>Star Wars Character Search</h1>
-  
-        <character-search
-          ?disabled=${loading}
-        ></character-search>
-  
+
+        <character-search ?disabled=${loading}></character-search>
+
         <character-list
           .characters=${this._characters}
           .state=${this._uiState}
           .errorMessage=${this._errorMessage}
         ></character-list>
-  
+
         <character-detail
           .character=${this._selected}
+          .hasResults=${this._characters.length > 0}
         ></character-detail>
       </main>
     `;

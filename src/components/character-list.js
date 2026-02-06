@@ -2,7 +2,7 @@
  * List of characters (name, birth year). Emits when a character is selected.
  *
  * @fires character-select - When the user selects a character.
- *   Detail: { character: SwapiPerson }
+ *   Detail: { character: SwapiPerson } (see services/swapi.js)
  */
 
 import { LitElement, html, css } from 'lit';
@@ -27,6 +27,25 @@ export class CharacterList extends LitElement {
         color: #c00;
         margin: 1rem 0;
       }
+      .loading {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        margin: 1rem 0;
+      }
+      .spinner {
+        width: 1.25rem;
+        height: 1.25rem;
+        border: 2px solid #ddd;
+        border-top-color: #333;
+        border-radius: 50%;
+        animation: spin 0.7s linear infinite;
+      }
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
     `;
   }
 
@@ -34,7 +53,7 @@ export class CharacterList extends LitElement {
     return {
       /** List of SWAPI person objects to display. */
       characters: { type: Array },
-      /** One of UI_STATE.* for loading/empty/error. */
+      /** One of UI_STATE.* (idle, loading, success, empty, error). */
       state: { type: String },
       /** Optional error message when state is 'error'. */
       errorMessage: { type: String },
@@ -49,33 +68,48 @@ export class CharacterList extends LitElement {
   }
 
   /**
-   * Dispatches a `character-select` event with the given character as detail.
+   * Emits character-select event with the selected character.
    * @param {import('../services/swapi.js').SwapiPerson} character
+   * @private
    */
   _select(character) {
-    debugger
     this.dispatchEvent(
       new CustomEvent('character-select', {
         detail: { character },
         bubbles: true,
         composed: true,
-      })
+      }),
     );
   }
 
   render() {
     if (this.state === 'loading') {
-      return html`<p role="status" aria-live="polite">Loading…</p>`;
+      return html`
+        <div class="loading" role="status">
+          <span class="spinner" aria-hidden="true"></span>
+          <span>Loading…</span>
+        </div>
+      `;
     }
     if (this.state === 'error') {
       return html`
-        <p role="alert" class="error">
-          ${this.errorMessage || 'Something went wrong.'}
-        </p>
+        <div role="alert" class="error">
+          <p>
+            <strong>${this.errorMessage || 'Something went wrong.'}</strong>
+          </p>
+          <p>You can try another search.</p>
+        </div>
+      `;
+    }
+    if (this.state === 'idle') {
+      return html`
+        <p role="status">Enter a name and click Search to find characters.</p>
       `;
     }
     if (this.state === 'empty' || !this.characters.length) {
-      return html`<p role="status">No characters found.</p>`;
+      return html`
+        <p role="status">No characters found. Try a different name.</p>
+      `;
     }
 
     return html`
@@ -91,7 +125,7 @@ export class CharacterList extends LitElement {
                 ${c.name} — ${c.birth_year}
               </button>
             </li>
-          `
+          `,
         )}
       </ul>
     `;

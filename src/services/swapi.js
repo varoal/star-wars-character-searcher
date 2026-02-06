@@ -5,7 +5,7 @@
  */
 
 /** Base URL for all API requests. */
-const SWAPI_BASE = "https://swapi.dev/api/";
+const SWAPI_BASE = 'https://swapi.dev/api/';
 
 /**
  * Person object returned by SWAPI.
@@ -31,14 +31,14 @@ const SWAPI_BASE = "https://swapi.dev/api/";
  * @returns {Promise<PeopleSearchResult>}
  */
 export async function getPeople(search) {
-  const url = new URL("people", SWAPI_BASE);
+  const url = new URL('people', SWAPI_BASE);
   if (search && String(search).trim()) {
-    url.searchParams.set("search", String(search).trim());
+    url.searchParams.set('search', String(search).trim());
   }
 
   try {
     const res = await fetch(url.toString(), {
-      headers: { Accept: "application/json" },
+      headers: { Accept: 'application/json' },
     });
 
     if (!res.ok) {
@@ -53,7 +53,7 @@ export async function getPeople(search) {
     if (!json || !Array.isArray(json.results)) {
       return {
         ok: false,
-        error: "Invalid response from server",
+        error: 'Invalid response from server',
       };
     }
 
@@ -62,7 +62,7 @@ export async function getPeople(search) {
       data: json.results,
     };
   } catch (e) {
-    const message = e && e.message ? e.message : "Network or request error";
+    const message = e && e.message ? e.message : 'Network or request error';
     return {
       ok: false,
       error: message,

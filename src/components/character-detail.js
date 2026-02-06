@@ -28,16 +28,22 @@ export class CharacterDetail extends LitElement {
     return {
       /** Selected character or null when none selected. */
       character: { type: Object },
+      /** True when there are list results to select; shows "Select a character" prompt. */
+      hasResults: { type: Boolean },
     };
   }
 
   constructor() {
     super();
     this.character = null;
+    this.hasResults = false;
   }
 
   render() {
     if (!this.character) {
+      if (!this.hasResults) {
+        return html``;
+      }
       return html`<p aria-live="polite">Select a character to see details.</p>`;
     }
 

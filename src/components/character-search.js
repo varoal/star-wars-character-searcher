@@ -36,13 +36,20 @@ export class CharacterSearch extends LitElement {
     this.disabled = false;
   }
 
-  /* Handle input changes by updating the value property. */
+  /**
+   * Handles input changes and updates the value property.
+   * @param {InputEvent} e - Input event from the search field.
+   * @private
+   */
   _onInput(e) {
     this.value = e.target.value;
   }
 
-  /* Handle form submission by dispatching a character-search event. 
-  */
+  /**
+   * Handles form submission, dispatches the character-search event with the query.
+   * @param {Event} e - Submit event from the form.
+   * @private
+   */
   _onSubmit(e) {
     e.preventDefault();
     const query = (this.value || '').trim();
@@ -51,7 +58,7 @@ export class CharacterSearch extends LitElement {
         detail: { query },
         bubbles: true,
         composed: true,
-      })
+      }),
     );
   }
 

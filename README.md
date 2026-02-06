@@ -2,6 +2,8 @@
 
 A small frontend assignment built with **Lit** (Web Components) and vanilla JavaScript. Search Star Wars characters by name and view details; data is fetched from [SWAPI](https://swapi.dev/documentation).
 > Scope note: This solution intentionally keeps the architecture and styling simple to match the expected ~4h implementation time.
+> The search is submit-based for simplicity; adding a debounced "search-as-you-type" flow would be a natural next step.
+
 
 ## Run the app
 
