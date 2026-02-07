@@ -7,7 +7,7 @@ describe('getPeople', () => {
   ];
 
   it('returns ok and data on success', async () => {
-    window.fetch = (async () =>
+    window.fetch = async () =>
       new Response(
         JSON.stringify({
           count: 1,
@@ -15,9 +15,8 @@ describe('getPeople', () => {
           previous: null,
           results: mockResults,
         }),
-        { status: 200, headers: { 'Content-Type': 'application/json' } }
-      )
-    );
+        { status: 200, headers: { 'Content-Type': 'application/json' } },
+      );
     const result = await getPeople('luke');
     expect(result.ok).to.be.true;
     expect(result.data).to.deep.equal(mockResults);
@@ -25,11 +24,33 @@ describe('getPeople', () => {
   });
 
   it('returns ok: false and error on HTTP error', async () => {
-    window.fetch = (async () =>
-      new Response('', { status: 500 })
-    );
+    window.fetch = async () => new Response('', { status: 500 });
     const result = await getPeople('x');
     expect(result.ok).to.be.false;
     expect(result.error).to.include('500');
+  });
+
+  it('returns ok: false on malformed response', async () => {
+    window.fetch = async () =>
+      new Response(
+        JSON.stringify({
+          count: 1,
+          next: null,
+          previous: null,
+          results: null,
+        }),
+        { status: 200, headers: { 'Content-Type': 'application/json' } },
+      );
+    const result = await getPeople('Luke');
+    expect(result.ok).to.be.false;
+  });
+
+  it('returns ok: false on network error', async () => {
+    window.fetch = async () => {
+      throw new Error('Network timeout');
+    };
+    const result = await getPeople('Luke');
+    expect(result.ok).to.be.false;
+    expect(result.error).to.include('Network timeout');
   });
 });

@@ -127,55 +127,105 @@ export class CharacterList extends LitElement {
     );
   }
 
-  render() {
-    if (this.state === 'loading') {
-      return html`
-        <div class="loading" role="status">
-          <span class="spinner" aria-hidden="true"></span>
-          <span>Loading…</span>
-        </div>
-      `;
-    }
-    if (this.state === 'error') {
-      return html`
-        <div role="alert" class="error">
-          <p>
-            <strong>${this.errorMessage || 'Something went wrong.'}</strong>
-          </p>
-          <p>You can try another search.</p>
-        </div>
-      `;
-    }
-    if (this.state === 'idle') {
-      return html`
-        <p role="status" class="list-wrap">Enter a name and click Search to find characters.</p>
-      `;
-    }
-    if (this.state === 'empty' || !this.characters.length) {
-      return html`
-        <p role="status" class="list-wrap">No characters found. Try a different name.</p>
-      `;
-    }
+  /**
+   * Maps state to corresponding render method.
+   * @private
+   */
+  get _stateRenderers() {
+    return {
+      loading: () => this._renderLoading(),
+      error: () => this._renderError(),
+      idle: () => this._renderIdle(),
+      empty: () => this._renderEmpty(),
+    };
+  }
 
+  /**
+   * Renders the appropriate UI based on the current state.
+   * @private
+   */
+  _renderContent() {
+    const renderer =
+      this._stateRenderers[this.state] || (() => this._renderList());
+    return renderer();
+  }
+
+  /**
+   * Renders loading spinner.
+   * @private
+   */
+  _renderLoading() {
     return html`
-      <div class="list-wrap">
-      <ul>
-        ${this.characters.map(
-      (c) => html`
-            <li>
-              <button
-                type="button"
-                @click=${() => this._select(c)}
-                data-name="${c.name}"
-              >
-                ${c.name} — ${c.birth_year}
-              </button>
-            </li>
-          `,
-    )}
-      </ul>
+      <div class="loading" role="status">
+        <span class="spinner" aria-hidden="true"></span>
+        <span>Loading…</span>
       </div>
     `;
+  }
+
+  /**
+   * Renders error message.
+   * @private
+   */
+  _renderError() {
+    return html`
+      <div role="alert" class="error">
+        <p>
+          <strong>${this.errorMessage || 'Something went wrong.'}</strong>
+        </p>
+        <p>You can try another search.</p>
+      </div>
+    `;
+  }
+
+  /**
+   * Renders idle prompt.
+   * @private
+   */
+  _renderIdle() {
+    return html`
+      <p role="status" class="list-wrap">
+        Enter a name and click Search to find characters.
+      </p>
+    `;
+  }
+
+  /**
+   * Renders empty state message.
+   * @private
+   */
+  _renderEmpty() {
+    return html`
+      <p role="status" class="list-wrap">
+        No characters found. Try a different name.
+      </p>
+    `;
+  }
+
+  /**
+   * Renders the character list.
+   * @private
+   */
+  _renderList() {
+    return html`
+      <div class="list-wrap">
+        <ul>
+          ${this.characters.map(
+            (c) => html`
+              <li>
+                <button type="button" @click=${() => this._select(c)}>
+                  ${c.name}
+                </button>
+              </li>
+            `,
+          )}
+        </ul>
+      </div>
+    `;
+  }
+
+  render() {
+    return this._renderContent();
   }
 }
 

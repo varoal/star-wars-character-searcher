@@ -43,34 +43,45 @@ export class CharacterSearch extends LitElement {
     this._debounceId = 0;
   }
 
+  /** Dispatches character-search event with the given query.
+   * @param {string} query - Search query to emit in event detail.
+   * @private
+   */
   _emitSearch(query) {
     this.dispatchEvent(
       new CustomEvent('character-search', {
-        detail: { query },
+        detail: { query: query.trim() },
         bubbles: true,
         composed: true,
       }),
     );
   }
 
+  /** Handles input event, updates value and sets up debounced search.
+   * @param {InputEvent} e - Input event from the search field.
+   * @private
+   */
   _onInput(e) {
     this.value = e.target.value;
-    const query = (this.value || '').trim();
     clearTimeout(this._debounceId);
-    if (query === '') {
+    if (this.value.trim() === '') {
       this._emitSearch('');
       return;
     }
     this._debounceId = window.setTimeout(() => {
-      this._emitSearch(query);
+      this._emitSearch(this.value);
     }, DEBOUNCE_MS);
   }
 
+  /** Handles form submit, cancels pending debounce and emits search immediately.
+   * @param {SubmitEvent} e - Submit event from the form.
+   * @private
+   */
   _onSubmit(e) {
     e.preventDefault();
     clearTimeout(this._debounceId);
     this._debounceId = 0;
-    this._emitSearch((this.value || '').trim());
+    this._emitSearch(this.value);
   }
 
   render() {

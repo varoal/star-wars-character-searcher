@@ -9,7 +9,7 @@ import './components/character-search.js';
 import './components/character-list.js';
 import './components/character-detail.js';
 
-export class StarWarsCharacterSearch extends LitElement {
+export class StarWarsCharacterSearcher extends LitElement {
   static get styles() {
     return css`
       main {
@@ -77,7 +77,9 @@ export class StarWarsCharacterSearch extends LitElement {
   }
 
   /**
+   * Handles character-search event from character-search component, triggers a new search.
    * @param {CustomEvent<{ query: string }>} e
+   * @private
    */
   _onSearch(e) {
     const query = String(e.detail?.query ?? '').trim();
@@ -95,7 +97,9 @@ export class StarWarsCharacterSearch extends LitElement {
   }
 
   /**
+   * Handles character-select event from character-list component, updates selected character.
    * @param {CustomEvent<{ character: import('./services/swapi.js').SwapiPerson }>} e
+   * @private
    */
   _onSelect(e) {
     this._selected = e.detail?.character ?? null;
@@ -104,6 +108,7 @@ export class StarWarsCharacterSearch extends LitElement {
   /**
    * Fetches people for the given query (cache hit skips API), updates list state.
    * @param {string} query
+   * @private
    */
   async _runSearch(query) {
     const key = query.toLowerCase();
@@ -147,7 +152,7 @@ export class StarWarsCharacterSearch extends LitElement {
         @character-search=${this._onSearch}
         @character-select=${this._onSelect}
       >
-        <h1>Star Wars Character Search</h1>
+        <h1>Star Wars Character Searcher</h1>
 
         <character-search></character-search>
 
@@ -174,4 +179,4 @@ export class StarWarsCharacterSearch extends LitElement {
   }
 }
 
-customElements.define('star-wars-character-search', StarWarsCharacterSearch);
+customElements.define('star-wars-character-searcher', StarWarsCharacterSearcher);
