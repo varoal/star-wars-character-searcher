@@ -214,7 +214,7 @@ export class CharacterList extends LitElement {
             (c) => html`
               <li>
                 <button type="button" @click=${() => this._select(c)}>
-                  ${c.name}
+                  ${c.name} - ${c.birth_year}
                 </button>
               </li>
             `,
